@@ -46,6 +46,7 @@ test('performance profiles expose safe desktop and mobile limits and clamp expen
   config.connectionOpacity = 1;
   config.trailLength = 30;
   config.shadowBlur = 100;
+  config.bloom = 1;
   assert.equal(ParticleSystem.clampConfigToPerformanceProfile(), true);
   assert.deepEqual(
     {
@@ -55,6 +56,7 @@ test('performance profiles expose safe desktop and mobile limits and clamp expen
       connectionOpacity: config.connectionOpacity,
       trailLength: config.trailLength,
       shadowBlur: config.shadowBlur,
+      bloom: config.bloom,
     },
     {
       particleCount: PERFORMANCE_PROFILES.economy.desktop.particleCount,
@@ -63,6 +65,7 @@ test('performance profiles expose safe desktop and mobile limits and clamp expen
       connectionOpacity: PERFORMANCE_PROFILES.economy.desktop.connectionOpacity,
       trailLength: PERFORMANCE_PROFILES.economy.desktop.trailLength,
       shadowBlur: PERFORMANCE_PROFILES.economy.desktop.shadowBlur,
+      bloom: PERFORMANCE_PROFILES.economy.desktop.bloom,
     }
   );
   assert.equal(ParticleSystem.readStoredSetting('performanceProfile', 'invalid'), 'balanced');

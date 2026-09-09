@@ -12,6 +12,38 @@ window.ParticleSystem = window.ParticleSystem || {};
 
   ParticleSystem.cachedGradient = null;
   ParticleSystem.lastGradientConfig = {};
+  ParticleSystem.bloomCanvas = null;
+
+  ParticleSystem.applyBloom = function applyBloom() {
+    if (!config.bloom) return;
+
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas || !ParticleSystem.ctx) return;
+    if (!ParticleSystem.bloomCanvas
+      || ParticleSystem.bloomCanvas.width !== canvas.width
+      || ParticleSystem.bloomCanvas.height !== canvas.height) {
+      ParticleSystem.bloomCanvas = document.createElement('canvas');
+      ParticleSystem.bloomCanvas.width = canvas.width;
+      ParticleSystem.bloomCanvas.height = canvas.height;
+    }
+
+    const bloomCtx = ParticleSystem.bloomCanvas.getContext('2d');
+    const pixelRatio = canvas.width / Math.max(1, ParticleSystem.canvasBounds.width);
+    bloomCtx.clearRect(0, 0, canvas.width, canvas.height);
+    bloomCtx.filter = `blur(${Math.round((8 + 28 * config.bloom) * pixelRatio)}px)`;
+    bloomCtx.drawImage(canvas, 0, 0);
+    bloomCtx.filter = 'none';
+
+    const ctx = ParticleSystem.ctx;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = 0.2 + config.bloom * 0.8;
+    ctx.drawImage(ParticleSystem.bloomCanvas, 0, 0);
+    ctx.globalAlpha = config.bloom * 0.45;
+    ctx.drawImage(ParticleSystem.bloomCanvas, 0, 0);
+    ctx.restore();
+  };
 
   ParticleSystem.renderBackground = function renderBackground() {
     const ctx = ParticleSystem.ctx;
@@ -218,6 +250,7 @@ window.ParticleSystem = window.ParticleSystem || {};
       width: window.innerWidth,
       height: window.innerHeight,
     };
+    ParticleSystem.bloomCanvas = null;
 
     canvas.width = Math.ceil(ParticleSystem.canvasBounds.width * pixelRatio);
     canvas.height = Math.ceil(ParticleSystem.canvasBounds.height * pixelRatio);

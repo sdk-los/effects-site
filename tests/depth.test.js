@@ -55,7 +55,9 @@ test('depth settings are exposed in the default configuration and panel', () => 
 
   assert.match(configSource, /depthEnabled: false/);
   assert.match(configSource, /depthStrength: 0\.65/);
+  assert.match(configSource, /bloom: 0/);
   assert.match(indexHtml, /<span>Эффекты<\/span>[\s\S]*data-setting="shadowBlur"/);
+  assert.match(indexHtml, /<span>Эффекты<\/span>[\s\S]*data-setting="bloom"/);
   assert.match(indexHtml, /<span>Эффекты<\/span>[\s\S]*data-setting="depthEnabled"/);
   assert.match(indexHtml, /<span class="section-hint">Нагрузка и FPS<\/span>/);
   assert.match(indexHtml, /data-setting="depthEnabled"/);

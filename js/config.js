@@ -10,6 +10,8 @@ window.ParticleSystem = window.ParticleSystem || {};
     particleSizeVariance: true,
     particleShape: 'circle',
     speedMultiplier: 1.0,
+    velocityStretchEnabled: false,
+    velocityStretchStrength: 1.5,
     particleRepulsionEnabled: false,
     particleRepulsionStrength: 0.3,
     particleRepulsionRadius: 36,
@@ -36,6 +38,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailMaxPoints: 120,
     pointerTrailShape: 'circle',
     shadowBlur: 0,
+    bloom: 0,
     depthEnabled: false,
     depthStrength: 0.65,
     parallaxStrength: 24,
@@ -80,23 +83,23 @@ window.ParticleSystem = window.ParticleSystem || {};
       label: 'Без ограничений',
       // Исходные максимумы контролов до появления профилей. DPR намеренно не
       // ограничивается, чтобы сохранить прежнее поведение canvas.
-      desktop: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
-      mobile: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
+      desktop: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50, bloom: 1 }),
+      mobile: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50, bloom: 1 }),
     }),
     economy: Object.freeze({
       label: 'Экономный',
-      desktop: Object.freeze({ particleCount: 120, pixelRatio: 1, connectionDistance: 90, connectionWidth: 1, connectionOpacity: 0.25, trailLength: 8, shadowBlur: 8 }),
-      mobile: Object.freeze({ particleCount: 80, pixelRatio: 1, connectionDistance: 75, connectionWidth: 1, connectionOpacity: 0.2, trailLength: 6, shadowBlur: 6 }),
+      desktop: Object.freeze({ particleCount: 120, pixelRatio: 1, connectionDistance: 90, connectionWidth: 1, connectionOpacity: 0.25, trailLength: 8, shadowBlur: 8, bloom: 0.35 }),
+      mobile: Object.freeze({ particleCount: 80, pixelRatio: 1, connectionDistance: 75, connectionWidth: 1, connectionOpacity: 0.2, trailLength: 6, shadowBlur: 6, bloom: 0.25 }),
     }),
     balanced: Object.freeze({
       label: 'Сбалансированный',
-      desktop: Object.freeze({ particleCount: 500, pixelRatio: 1.5, connectionDistance: 120, connectionWidth: 1.5, connectionOpacity: 0.35, trailLength: 14, shadowBlur: 20 }),
-      mobile: Object.freeze({ particleCount: 250, pixelRatio: 1.25, connectionDistance: 105, connectionWidth: 1.25, connectionOpacity: 0.3, trailLength: 10, shadowBlur: 14 }),
+      desktop: Object.freeze({ particleCount: 500, pixelRatio: 1.5, connectionDistance: 120, connectionWidth: 1.5, connectionOpacity: 0.35, trailLength: 14, shadowBlur: 20, bloom: 0.65 }),
+      mobile: Object.freeze({ particleCount: 250, pixelRatio: 1.25, connectionDistance: 105, connectionWidth: 1.25, connectionOpacity: 0.3, trailLength: 10, shadowBlur: 14, bloom: 0.5 }),
     }),
     maximum: Object.freeze({
       label: 'Максимальный',
-      desktop: Object.freeze({ particleCount: 1500, pixelRatio: 2, connectionDistance: 180, connectionWidth: 2, connectionOpacity: 0.5, trailLength: 24, shadowBlur: 40 }),
-      mobile: Object.freeze({ particleCount: 750, pixelRatio: 1.5, connectionDistance: 150, connectionWidth: 1.75, connectionOpacity: 0.45, trailLength: 18, shadowBlur: 28 }),
+      desktop: Object.freeze({ particleCount: 1500, pixelRatio: 2, connectionDistance: 180, connectionWidth: 2, connectionOpacity: 0.5, trailLength: 24, shadowBlur: 40, bloom: 0.85 }),
+      mobile: Object.freeze({ particleCount: 750, pixelRatio: 1.5, connectionDistance: 150, connectionWidth: 1.75, connectionOpacity: 0.45, trailLength: 18, shadowBlur: 28, bloom: 0.65 }),
     }),
   });
 

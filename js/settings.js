@@ -10,6 +10,8 @@ window.ParticleSystem = window.ParticleSystem || {};
     particleCount: ParticleSystem.createParticles,
     particleShape: null,
     speedMultiplier: ParticleSystem.updateParticleSpeed,
+    velocityStretchEnabled: null,
+    velocityStretchStrength: null,
     particleRepulsionEnabled: null,
     particleRepulsionStrength: null,
     particleRepulsionRadius: null,
@@ -32,6 +34,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailMinDistance: null,
     pointerTrailMaxPoints: null,
     shadowBlur: ParticleSystem.updateParticleShadowBlur,
+    bloom: null,
     depthEnabled: null,
     depthStrength: null,
     parallaxStrength: null,
@@ -84,7 +87,7 @@ window.ParticleSystem = window.ParticleSystem || {};
       ParticleSystem.createParticles();
     }
     ParticleSystem.getSettingsControls().forEach((input) => {
-      if (['particleCount', 'connectionDistance', 'connectionWidth', 'connectionOpacity', 'trailLength', 'shadowBlur'].includes(input.getAttribute(CONSTANTS.ATTR_SETTING))) {
+      if (['particleCount', 'connectionDistance', 'connectionWidth', 'connectionOpacity', 'trailLength', 'shadowBlur', 'bloom'].includes(input.getAttribute(CONSTANTS.ATTR_SETTING))) {
         ParticleSystem.syncControl(input);
       }
     });
@@ -160,7 +163,7 @@ window.ParticleSystem = window.ParticleSystem || {};
 
   /* ── Display helpers ── */
   ParticleSystem.formatDisplayValue = function formatDisplayValue(key, value) {
-    if (key === 'attractionForce' || key === 'trailOpacity' || key === 'selfDriftIntensity' || key === 'selfDriftOrbitRepulsionStrength' || key === 'particleRepulsionStrength') return value.toFixed(2);
+    if (key === 'attractionForce' || key === 'trailOpacity' || key === 'selfDriftIntensity' || key === 'selfDriftOrbitRepulsionStrength' || key === 'particleRepulsionStrength' || key === 'velocityStretchStrength') return value.toFixed(2);
     if (key === 'pointerTrailLifetime') return `${Math.round(value)} мс`;
     if (key === 'pointerTrailSize' || key === 'pointerTrailMinDistance') return `${Math.round(value)} px`;
     if (key === 'pointerTrailMaxPoints' || key === 'particleRepulsionRadius') return `${Math.round(value)} px`;
@@ -173,6 +176,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'particleRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance' || key === 'depthEnabled') {
       return checked ? 'Включена' : 'Выключена';
     }
+    if (key === 'velocityStretchEnabled') return checked ? 'Включен' : 'Выключен';
     return checked ? 'Включены' : 'Выключены';
   };
 
@@ -374,6 +378,15 @@ window.ParticleSystem = window.ParticleSystem || {};
     });
   };
 
+  ParticleSystem.syncVelocityStretchSettingsVisibility = function syncVelocityStretchSettingsVisibility() {
+    const panel = document.getElementById('settings-panel');
+    if (!panel) return;
+
+    panel.querySelectorAll('[data-velocity-stretch-setting]').forEach((group) => {
+      group.hidden = !config.velocityStretchEnabled;
+    });
+  };
+
   /* ── Input handlers ── */
   ParticleSystem.handleCheckboxInput = function handleCheckboxInput(input, key) {
     const value = input.checked;
@@ -430,6 +443,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     ParticleSystem.syncExplosionSettingsVisibility();
     ParticleSystem.syncCursorTrailSettingsVisibility();
     ParticleSystem.syncDepthSettingsVisibility();
+    ParticleSystem.syncVelocityStretchSettingsVisibility();
     ParticleSystem.syncPresetSelect();
     ParticleSystem.syncFpsIndicator();
   };
@@ -459,6 +473,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'explosionEnabled' || key === 'explosionMode') ParticleSystem.syncExplosionSettingsVisibility();
     if (key === 'cursorMode') ParticleSystem.syncCursorTrailSettingsVisibility();
     if (key === 'depthEnabled') ParticleSystem.syncDepthSettingsVisibility();
+    if (key === 'velocityStretchEnabled') ParticleSystem.syncVelocityStretchSettingsVisibility();
     if (key === 'showFps' || key === 'showParticleCount') ParticleSystem.syncFpsIndicator();
     ParticleSystem.applySettings(key);
     ParticleSystem.syncPresetSelect();

@@ -30,6 +30,8 @@ function loadParticleSystem(bounce) {
       particleShape: 'circle',
       hue: 0,
       speedMultiplier: 1,
+      velocityStretchEnabled: false,
+      velocityStretchStrength: 1.5,
       shadowBlur: 0,
       trailLength: 10,
       trailEnabled: true,
@@ -124,4 +126,45 @@ test('disabled particle repulsion leaves velocity unchanged', () => {
 
   assert.equal(particle.vx, 0);
   assert.equal(particle.vy, 0);
+});
+
+test('velocity stretch aligns the particle with its velocity and restores the canvas', () => {
+  const ParticleSystem = loadParticleSystem(true);
+  ParticleSystem.config.velocityStretchEnabled = true;
+  const calls = [];
+  ParticleSystem.ctx = {
+    save: () => calls.push('save'),
+    translate: (...values) => calls.push(['translate', ...values]),
+    rotate: (value) => calls.push(['rotate', value]),
+    scale: (...values) => calls.push(['scale', ...values]),
+    restore: () => calls.push('restore'),
+    beginPath: () => {}, arc: () => {}, fill: () => {},
+  };
+  const particle = new ParticleSystem.Particle(50, 40);
+  particle.vx = 2;
+  particle.vy = 2;
+
+  particle.draw();
+
+  assert.deepEqual(calls, [
+    'save',
+    ['translate', 50, 40],
+    ['rotate', Math.PI / 4],
+    ['scale', 4, 0.5],
+    'restore',
+  ]);
+});
+
+test('velocity stretch falls back to the normal shape for a stopped particle', () => {
+  const ParticleSystem = loadParticleSystem(true);
+  ParticleSystem.config.velocityStretchEnabled = true;
+  const calls = [];
+  ParticleSystem.drawShape = (...args) => calls.push(args);
+  ParticleSystem.ctx = {};
+  const particle = new ParticleSystem.Particle(50, 40);
+
+  particle.draw();
+
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0].slice(1), [50, 40, 4, 'circle']);
 });

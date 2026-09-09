@@ -82,7 +82,15 @@ window.ParticleSystem = window.ParticleSystem || {};
       ctx.shadowColor = this.color;
       ctx.shadowBlur = renderState.shadowBlur;
       ctx.globalAlpha = renderState.opacity;
-      ParticleSystem.drawShape(ctx, renderState.x, renderState.y, renderState.size, config.particleShape);
+      ParticleSystem.drawVelocityStretch(
+        ctx,
+        renderState.x,
+        renderState.y,
+        renderState.size,
+        config.particleShape,
+        this.vx,
+        this.vy
+      );
       ctx.globalAlpha = 1;
     }
 
@@ -302,6 +310,22 @@ window.ParticleSystem = window.ParticleSystem || {};
     }
   };
 
+  ParticleSystem.drawVelocityStretch = function drawVelocityStretch(ctx, x, y, size, shape, vx, vy) {
+    const speed = Math.hypot(vx, vy);
+    if (!config.velocityStretchEnabled || speed < 0.01) {
+      ParticleSystem.drawShape(ctx, x, y, size, shape);
+      return;
+    }
+
+    const stretch = 1 + Math.min(speed * config.velocityStretchStrength, 3);
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.atan2(vy, vx));
+    ctx.scale(stretch, 1 / Math.sqrt(stretch));
+    ParticleSystem.drawShape(ctx, 0, 0, size, shape);
+    ctx.restore();
+  };
+
   /* ── Взрывы по клику ── */
 
   ParticleSystem.explosionParticles = [];
@@ -342,7 +366,15 @@ window.ParticleSystem = window.ParticleSystem || {};
       ctx.fillStyle = this.color;
       ctx.shadowColor = this.color;
       ctx.shadowBlur = config.shadowBlur;
-      ParticleSystem.drawShape(ctx, this.x, this.y, this.size, config.particleShape);
+      ParticleSystem.drawVelocityStretch(
+        ctx,
+        this.x,
+        this.y,
+        this.size,
+        config.particleShape,
+        this.vx,
+        this.vy
+      );
       ctx.restore();
     }
   }
