@@ -26,12 +26,39 @@ window.ParticleSystem = window.ParticleSystem || {};
       const cx = ParticleSystem.canvasBounds ? ParticleSystem.canvasBounds.width / 2 : 0;
       const cy = ParticleSystem.canvasBounds ? ParticleSystem.canvasBounds.height / 2 : 0;
       this.anchorRadius = ParticleSystem.distance(this.anchorX, this.anchorY, cx, cy);
+      this.depth = Math.random();
+      this.depthVelocity = (Math.random() < 0.5 ? -1 : 1) * (0.001 + Math.random() * 0.0015);
       this.trail = [];
       this.maxTrailLength = config.trailLength;
     }
 
+    getRenderState() {
+      if (!config.depthEnabled) {
+        return { x: this.x, y: this.y, size: this.size, opacity: 1, shadowBlur: this.shadowBlur };
+      }
+
+      const depth = ParticleSystem.clamp(this.depth, 0, 1);
+      const depthOffset = (depth - 0.5) * 2;
+      const width = ParticleSystem.canvasBounds.width || 1;
+      const height = ParticleSystem.canvasBounds.height || 1;
+      const pointerX = ParticleSystem.isPointerActive() ? ParticleSystem.mouseX - width / 2 : 0;
+      const pointerY = ParticleSystem.isPointerActive() ? ParticleSystem.mouseY - height / 2 : 0;
+      const parallax = config.parallaxStrength * depthOffset;
+      const scale = 1 + depthOffset * config.depthStrength * 0.55;
+      const opacity = ParticleSystem.clamp(0.45 + depth * 0.55 * config.depthStrength, 0.25, 1);
+
+      return {
+        x: this.x + (pointerX / width) * parallax,
+        y: this.y + (pointerY / height) * parallax,
+        size: Math.max(0.1, this.size * scale),
+        opacity,
+        shadowBlur: this.shadowBlur * (0.55 + depth * 0.9 * config.depthStrength),
+      };
+    }
+
     draw() {
       const ctx = ParticleSystem.ctx;
+      const renderState = this.getRenderState();
       
       // Draw trail if enabled (optimized with lineWidth gradient)
       if (config.trailEnabled && this.trail.length > 1) {
@@ -53,8 +80,10 @@ window.ParticleSystem = window.ParticleSystem || {};
       // Draw particle
       ctx.fillStyle = this.color;
       ctx.shadowColor = this.color;
-      ctx.shadowBlur = this.shadowBlur;
-      ParticleSystem.drawShape(ctx, this.x, this.y, this.size, config.particleShape);
+      ctx.shadowBlur = renderState.shadowBlur;
+      ctx.globalAlpha = renderState.opacity;
+      ParticleSystem.drawShape(ctx, renderState.x, renderState.y, renderState.size, config.particleShape);
+      ctx.globalAlpha = 1;
     }
 
     applySelfDrift() {
@@ -202,6 +231,13 @@ window.ParticleSystem = window.ParticleSystem || {};
       this.applyFriction();
       this.handleBoundaries();
       this.updateSize();
+      if (config.depthEnabled) {
+        this.depth += this.depthVelocity * config.depthSpeed;
+        if (this.depth <= 0 || this.depth >= 1) {
+          this.depth = ParticleSystem.clamp(this.depth, 0, 1);
+          this.depthVelocity *= -1;
+        }
+      }
     }
   }
 

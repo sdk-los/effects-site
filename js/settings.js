@@ -32,6 +32,10 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailMinDistance: null,
     pointerTrailMaxPoints: null,
     shadowBlur: ParticleSystem.updateParticleShadowBlur,
+    depthEnabled: null,
+    depthStrength: null,
+    parallaxStrength: null,
+    depthSpeed: null,
     backgroundMode: ParticleSystem.renderBackground,
     backgroundColor: ParticleSystem.renderBackground,
     backgroundGradientStrength: ParticleSystem.renderBackground,
@@ -166,7 +170,7 @@ window.ParticleSystem = window.ParticleSystem || {};
   };
 
   ParticleSystem.getToggleLabelText = function getToggleLabelText(key, checked) {
-    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'particleRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance') {
+    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'particleRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance' || key === 'depthEnabled') {
       return checked ? 'Включена' : 'Выключена';
     }
     return checked ? 'Включены' : 'Выключены';
@@ -361,6 +365,15 @@ window.ParticleSystem = window.ParticleSystem || {};
     });
   };
 
+  ParticleSystem.syncDepthSettingsVisibility = function syncDepthSettingsVisibility() {
+    const panel = document.getElementById('settings-panel');
+    if (!panel) return;
+
+    panel.querySelectorAll('[data-depth-setting]').forEach((group) => {
+      group.hidden = !config.depthEnabled;
+    });
+  };
+
   /* ── Input handlers ── */
   ParticleSystem.handleCheckboxInput = function handleCheckboxInput(input, key) {
     const value = input.checked;
@@ -416,6 +429,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     ParticleSystem.syncDriftOrbitRepulsionVisibility();
     ParticleSystem.syncExplosionSettingsVisibility();
     ParticleSystem.syncCursorTrailSettingsVisibility();
+    ParticleSystem.syncDepthSettingsVisibility();
     ParticleSystem.syncPresetSelect();
     ParticleSystem.syncFpsIndicator();
   };
@@ -444,6 +458,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'selfDriftMode') ParticleSystem.syncDriftOrbitRepulsionVisibility();
     if (key === 'explosionEnabled' || key === 'explosionMode') ParticleSystem.syncExplosionSettingsVisibility();
     if (key === 'cursorMode') ParticleSystem.syncCursorTrailSettingsVisibility();
+    if (key === 'depthEnabled') ParticleSystem.syncDepthSettingsVisibility();
     if (key === 'showFps' || key === 'showParticleCount') ParticleSystem.syncFpsIndicator();
     ParticleSystem.applySettings(key);
     ParticleSystem.syncPresetSelect();

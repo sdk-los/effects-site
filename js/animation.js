@@ -18,6 +18,7 @@ window.ParticleSystem = window.ParticleSystem || {};
   ParticleSystem.ADAPTIVE_QUALITY_ORDER = [
     'showConnections',
     'auroraEnabled',
+    'depthEnabled',
     'particleCount',
     'shadowBlur',
     'trailLength',
@@ -97,6 +98,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'trailLength') return currentValue > 4;
     if (key === 'showConnections') return currentValue === true;
     if (key === 'auroraEnabled') return currentValue === true;
+    if (key === 'depthEnabled') return currentValue === true;
     return false;
   };
 
@@ -124,6 +126,7 @@ window.ParticleSystem = window.ParticleSystem || {};
 
     if (key === 'showConnections') nextValue = false;
     else if (key === 'auroraEnabled') nextValue = false;
+    else if (key === 'depthEnabled') nextValue = false;
     else if (key === 'particleCount') nextValue = Math.max(80, Math.round(currentValue * 0.75));
     else if (key === 'shadowBlur') nextValue = Math.max(0, currentValue - 10);
     else if (key === 'trailLength') nextValue = Math.max(4, currentValue - 4);
@@ -189,7 +192,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     ParticleSystem.drawAurora(timestamp);
     ParticleSystem.drawPointerTrails(timestamp);
     ParticleSystem.drawConnections();
-    ParticleSystem.particles.forEach((p) => {
+    ParticleSystem.particles.slice().sort((first, second) => first.depth - second.depth).forEach((p) => {
       p.update();
       p.draw();
     });
