@@ -20,7 +20,8 @@
    * Содержит основные константы системы, перечисления режимов курсора, доступные формы частиц, цветовые палитры и пресеты.
 2. **[`js/config.js`](js/config.js)**
    * Содержит конфигурацию по умолчанию ([`ParticleSystem.DEFAULT_CONFIG`](js/config.js:7)) и готовые пресеты (`Calm`, `Neon`, `Storm`, `Minimal`, `Constellation` и др.).
-   * Отвечает за сохранение/загрузку настроек из `localStorage` и кодирование/декодирование параметров в URL hash (`#scene=...`).
+   * Отвечает за сохранение/загрузку настроек из `localStorage`, кодирование/декодирование параметров в URL hash (`#scene=...`) и хранение флагов адаптивного качества.
+   * Хранит последний изменённый тяжёлый параметр в отдельном ключе localStorage; runtime overrides остаются временным общим механизмом, но адаптивные снижения записываются напрямую в `userConfig`.
 3. **[`js/utils.js`](js/utils.js)**
    * Вспомогательные математические функции (генерация случайных чисел, конвертация HSL/RGB, расчёт дистанций).
    * Реализует математику для **13 режимов само-дрейфа** частиц (`random`, `horizontal`, `vertical`, `orbit`, `wave`, `spiral` и т.д.).
@@ -34,10 +35,12 @@
    * Обработка пользовательского ввода: отслеживание координат мыши и сенсорных касаний (Touch events), а также генерирование следов за курсором.
 7. **[`js/settings.js`](js/settings.js)**
    * Управление UI панели настроек: двухстороннее связывание элементов формы (слайдеры, селекты, чекбоксы) с объектом `config`.
+   * Обрабатывает toggle адаптивного качества, ручное изменение тяжёлых параметров, синхронизацию контролов и сброс состояния.
    * Поддержка жестов свайпа для скрытия панели и клавиатурной навигации (Focus Trap).
 8. **[`js/animation.js`](js/animation.js)**
    * Главный анимационный цикл [`ParticleSystem.animate()`](js/animation.js:11), работающий через `requestAnimationFrame`.
-   * Подсчёт показателей производительности (FPS) и счетчик общего числа активных частиц на экране.
+   * Подсчёт показателей производительности (FPS), счетчик общего числа активных частиц на экране и менеджер адаптивного качества.
+   * Менеджер отслеживает низкий FPS, выбирает кандидата по приоритету, снижает настройку, обновляет связанные runtime-объекты и уведомляет пользователя.
 9. **[`js/main.js`](js/main.js)**
    * Точка входа приложения: регистрация слушателей событий (`resize`, `visibilitychange`, `keydown`), инициализация холста и запуск анимации.
 
@@ -50,18 +53,23 @@ flowchart TD
     A[main.js / Точка входа] --> B[setupCanvas & Events]
     A --> C[settings.js / UI & Config Sync]
     
-    C <--> D[config.js / LocalStorage & URL Scene Hash]
+   C <--> D[config.js / LocalStorage, URL Scene Hash & Adaptive Flags]
     
     subgraph AnimationLoop [Animation Loop: animation.js]
-        E[ParticleSystem.animate] --> F[renderer.js: Фон, Aurora, Connections]
+      E[ParticleSystem.animate] --> F[renderer.js: Фон, Aurora, Connections]
         E --> G[Particle.update & Particle.draw: particle.js]
         E --> H[pointer.js: Trails & Interactions]
         E --> I[HUD Indicators: FPS & Count]
+      I --> J[Adaptive Quality: threshold, cooldown & candidate]
     end
 
-    G --> J[utils.js: Math & Self-Drift Algorithms]
-    F --> K[HTML5 Canvas 2D]
-    G --> K
+   J --> D
+   D --> K[Effective rendering settings]
+   K --> F
+   K --> G
+   G --> L[utils.js: Math & Self-Drift Algorithms]
+   F --> M[HTML5 Canvas 2D]
+   G --> M
 ```
 
 ---
