@@ -31,7 +31,6 @@ window.ParticleSystem = window.ParticleSystem || {};
     PALETTE_HUE_VARIANCE: 10,
     HEX_COLOR_PATTERN: /^#[0-9a-f]{6}$/i,
     FPS_UPDATE_INTERVAL: 500,
-    TRAIL_MAX_POINTS: 120,
     ORBIT_TANGENTIAL_FORCE: 0.85,
     ORBIT_RADIAL_BALANCE: 0.2,
     /* ── Взрывы по клику ── */

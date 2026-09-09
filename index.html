@@ -361,6 +361,15 @@
 
         <div class="control-group" data-cursor-trail-setting hidden>
           <div class="control-label">
+            <span>Максимум точек</span>
+            <button class="setting-help" type="button" data-tooltip="Максимальное количество точек, которое может одновременно находиться в следе." aria-label="Что означает максимум точек следа?">?</button>
+            <span class="control-value" data-display="pointerTrailMaxPoints">120</span>
+          </div>
+          <input type="range" data-setting="pointerTrailMaxPoints" min="10" max="500" step="1" value="120">
+        </div>
+
+        <div class="control-group" data-cursor-trail-setting hidden>
+          <div class="control-label">
             <span>Форма следа</span>
             <button class="setting-help" type="button" data-tooltip="Форма точек следа, остающихся за курсором в режиме «След»." aria-label="Что такое форма следа?">?</button>
           </div>
@@ -752,6 +761,7 @@
 
     <div class="settings-footer">
       <a class="github-link" href="https://github.com/sdk-los/ParticleFlow" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span class="app-version" aria-label="Версия приложения">v__APP_VERSION__</span>
     </div>
   </div>
 

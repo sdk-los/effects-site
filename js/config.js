@@ -30,6 +30,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailLifetime: 700,
     pointerTrailSize: 26,
     pointerTrailMinDistance: 8,
+    pointerTrailMaxPoints: 120,
     pointerTrailShape: 'circle',
     shadowBlur: 0,
     pulsate: true,

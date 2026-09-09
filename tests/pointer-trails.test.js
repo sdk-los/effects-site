@@ -23,11 +23,12 @@ function loadPointerSystem() {
   };
   context.window = context;
   context.window.ParticleSystem = {
-    CONSTANTS: { MOUSE_OUT_OF_BOUNDS: -1000, TRAIL_MAX_POINTS: 120 },
+    CONSTANTS: { MOUSE_OUT_OF_BOUNDS: -1000 },
     config: {
       cursorInteractionEnabled: true,
       cursorMode: 'trail',
       pointerTrailMinDistance: 8,
+      pointerTrailMaxPoints: 120,
     },
     getParticleColor: () => '#abcdef',
   };
@@ -156,6 +157,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
     pointerTrailLifetime: { min: '150', max: '5000' },
     pointerTrailSize: { min: '6', max: '50' },
     pointerTrailMinDistance: { min: '2', max: '30' },
+    pointerTrailMaxPoints: { min: '10', max: '500' },
   };
   const context = {
     window: {},
@@ -179,6 +181,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailLifetime', 50), 150);
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailSize', 80), 50);
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailMinDistance', 0), 2);
+  assert.equal(ParticleSystem.readStoredSetting('pointerTrailMaxPoints', 600), 500);
   assert.equal(ParticleSystem.readStoredSetting('trailColor', '#12abef'), '#12abef');
   assert.equal(ParticleSystem.readStoredSetting('trailColor', 'blue'), '#ffffff');
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailShape', 'star'), 'star');
@@ -186,6 +189,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   ParticleSystem.config.pointerTrailLifetime = 1200;
   ParticleSystem.config.pointerTrailSize = 32;
   ParticleSystem.config.pointerTrailMinDistance = 4;
+  ParticleSystem.config.pointerTrailMaxPoints = 240;
   ParticleSystem.config.trailColor = '#12abef';
   ParticleSystem.config.pointerTrailShape = 'heart';
   ParticleSystem.saveSettings();
@@ -193,6 +197,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.equal(persistedSettings.pointerTrailLifetime, 1200);
   assert.equal(persistedSettings.pointerTrailSize, 32);
   assert.equal(persistedSettings.pointerTrailMinDistance, 4);
+  assert.equal(persistedSettings.pointerTrailMaxPoints, 240);
   assert.equal(persistedSettings.trailColor, '#12abef');
   assert.equal(persistedSettings.pointerTrailShape, 'heart');
   Object.values(ParticleSystem.SETTINGS_PRESETS).forEach((preset) => {
@@ -202,6 +207,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.match(indexHtml, /data-setting="pointerTrailLifetime"/);
   assert.match(indexHtml, /data-setting="pointerTrailSize"/);
   assert.match(indexHtml, /data-setting="pointerTrailMinDistance"/);
+  assert.match(indexHtml, /data-setting="pointerTrailMaxPoints"/);
   assert.match(indexHtml, /data-setting="trailColor"/);
   assert.match(indexHtml, /data-setting="pointerTrailShape"/);
 });

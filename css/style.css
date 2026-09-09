@@ -614,6 +614,13 @@
       letter-spacing: 0.2px;
     }
 
+    .app-version {
+      margin-left: 8px;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+      letter-spacing: 0.2px;
+    }
+
     .github-link:hover {
       color: #0acf83;
     }

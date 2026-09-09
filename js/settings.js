@@ -27,6 +27,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailLifetime: null,
     pointerTrailSize: null,
     pointerTrailMinDistance: null,
+    pointerTrailMaxPoints: null,
     shadowBlur: ParticleSystem.updateParticleShadowBlur,
     backgroundMode: ParticleSystem.renderBackground,
     backgroundColor: ParticleSystem.renderBackground,
@@ -155,6 +156,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'attractionForce' || key === 'trailOpacity' || key === 'selfDriftIntensity' || key === 'selfDriftOrbitRepulsionStrength') return value.toFixed(2);
     if (key === 'pointerTrailLifetime') return `${Math.round(value)} мс`;
     if (key === 'pointerTrailSize' || key === 'pointerTrailMinDistance') return `${Math.round(value)} px`;
+    if (key === 'pointerTrailMaxPoints') return `${Math.round(value)}`;
     if (key === 'speedMultiplier' || key === 'selfDriftSpeed') return value.toFixed(1);
     if (key === 'selfDriftOrbitRadius') return Math.round(value) + '%';
     return String(value);

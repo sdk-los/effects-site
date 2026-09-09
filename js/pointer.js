@@ -49,8 +49,8 @@ window.ParticleSystem = window.ParticleSystem || {};
       color: ParticleSystem.getParticleColor(),
     });
 
-    if (ParticleSystem.pointerTrails.length > CONSTANTS.TRAIL_MAX_POINTS) {
-      ParticleSystem.pointerTrails.splice(0, ParticleSystem.pointerTrails.length - CONSTANTS.TRAIL_MAX_POINTS);
+    if (ParticleSystem.pointerTrails.length > config.pointerTrailMaxPoints) {
+      ParticleSystem.pointerTrails.splice(0, ParticleSystem.pointerTrails.length - config.pointerTrailMaxPoints);
     }
   };
 })();
