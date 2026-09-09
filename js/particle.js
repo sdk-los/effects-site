@@ -11,7 +11,9 @@ window.ParticleSystem = window.ParticleSystem || {};
       const { SIZE_VARIANCE, HUE_VARIANCE, SPEED_VARIANCE } = CONSTANTS;
       this.x = x;
       this.y = y;
-      this.size = config.particleSize + ParticleSystem.randomBetween(-SIZE_VARIANCE, SIZE_VARIANCE);
+      this.size = config.particleSize + (config.particleSizeVariance
+        ? ParticleSystem.randomBetween(-SIZE_VARIANCE, SIZE_VARIANCE)
+        : 0);
       this.baseSize = this.size;
       this.hue = config.hue + ParticleSystem.randomBetween(-HUE_VARIANCE, HUE_VARIANCE);
       this.color = ParticleSystem.getParticleColor();
@@ -141,6 +143,11 @@ window.ParticleSystem = window.ParticleSystem || {};
     }
 
     updateSize() {
+      if (!config.particleSizeVariance) {
+        this.size = config.particleSize;
+        return;
+      }
+
       this.size = config.pulsate
         ? this.baseSize +
           Math.sin(Date.now() * CONSTANTS.PULSATION_SPEED + this.x + this.y) *
@@ -194,7 +201,9 @@ window.ParticleSystem = window.ParticleSystem || {};
   ParticleSystem.updateParticleSizes = function updateParticleSizes() {
     const { SIZE_VARIANCE } = CONSTANTS;
     ParticleSystem.particles.forEach((p) => {
-      p.baseSize = config.particleSize + ParticleSystem.randomBetween(-SIZE_VARIANCE, SIZE_VARIANCE);
+      p.baseSize = config.particleSize + (config.particleSizeVariance
+        ? ParticleSystem.randomBetween(-SIZE_VARIANCE, SIZE_VARIANCE)
+        : 0);
     });
   };
 

@@ -16,6 +16,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     selfDriftMode: null,
     selfDriftDirection: null,
     particleSize: ParticleSystem.updateParticleSizes,
+    particleSizeVariance: ParticleSystem.updateParticleSizes,
     hue: ParticleSystem.updateParticleHues,
     colorPalette: ParticleSystem.updateParticleColors,
     customColor1: ParticleSystem.updateParticleColors,
@@ -160,7 +161,7 @@ window.ParticleSystem = window.ParticleSystem || {};
   };
 
   ParticleSystem.getToggleLabelText = function getToggleLabelText(key, checked) {
-    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting') {
+    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance') {
       return checked ? 'Включена' : 'Выключена';
     }
     return checked ? 'Включены' : 'Выключены';

@@ -7,6 +7,7 @@ window.ParticleSystem = window.ParticleSystem || {};
   ParticleSystem.DEFAULT_CONFIG = Object.freeze({
     particleCount: 250,
     particleSize: 4,
+    particleSizeVariance: true,
     particleShape: 'circle',
     speedMultiplier: 1.0,
     selfDriftEnabled: false,
@@ -70,8 +71,8 @@ window.ParticleSystem = window.ParticleSystem || {};
       label: 'Без ограничений',
       // Исходные максимумы контролов до появления профилей. DPR намеренно не
       // ограничивается, чтобы сохранить прежнее поведение canvas.
-      desktop: Object.freeze({ particleCount: 5000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
-      mobile: Object.freeze({ particleCount: 5000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
+      desktop: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
+      mobile: Object.freeze({ particleCount: 10000, pixelRatio: Infinity, connectionDistance: 300, connectionWidth: 5, connectionOpacity: 1, trailLength: 30, shadowBlur: 50 }),
     }),
     economy: Object.freeze({
       label: 'Экономный',
