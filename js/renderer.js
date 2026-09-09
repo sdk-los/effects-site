@@ -136,7 +136,8 @@ window.ParticleSystem = window.ParticleSystem || {};
     }
 
     if (connectionCount > 0) {
-      ctx.strokeStyle = `rgba(255, 255, 255, ${maxOpacity})`;
+      const [red, green, blue] = ParticleSystem.hexToRgb(config.connectionColor);
+      ctx.strokeStyle = `rgba(${red}, ${green}, ${blue}, ${maxOpacity})`;
       ctx.lineWidth = lineWidth;
       ctx.stroke();
     }

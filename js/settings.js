@@ -10,6 +10,9 @@ window.ParticleSystem = window.ParticleSystem || {};
     particleCount: ParticleSystem.createParticles,
     particleShape: null,
     speedMultiplier: ParticleSystem.updateParticleSpeed,
+    particleRepulsionEnabled: null,
+    particleRepulsionStrength: null,
+    particleRepulsionRadius: null,
     selfDriftEnabled: null,
     selfDriftIntensity: null,
     selfDriftSpeed: null,
@@ -153,17 +156,17 @@ window.ParticleSystem = window.ParticleSystem || {};
 
   /* ── Display helpers ── */
   ParticleSystem.formatDisplayValue = function formatDisplayValue(key, value) {
-    if (key === 'attractionForce' || key === 'trailOpacity' || key === 'selfDriftIntensity' || key === 'selfDriftOrbitRepulsionStrength') return value.toFixed(2);
+    if (key === 'attractionForce' || key === 'trailOpacity' || key === 'selfDriftIntensity' || key === 'selfDriftOrbitRepulsionStrength' || key === 'particleRepulsionStrength') return value.toFixed(2);
     if (key === 'pointerTrailLifetime') return `${Math.round(value)} мс`;
     if (key === 'pointerTrailSize' || key === 'pointerTrailMinDistance') return `${Math.round(value)} px`;
-    if (key === 'pointerTrailMaxPoints') return `${Math.round(value)}`;
+    if (key === 'pointerTrailMaxPoints' || key === 'particleRepulsionRadius') return `${Math.round(value)} px`;
     if (key === 'speedMultiplier' || key === 'selfDriftSpeed') return value.toFixed(1);
     if (key === 'selfDriftOrbitRadius') return Math.round(value) + '%';
     return String(value);
   };
 
   ParticleSystem.getToggleLabelText = function getToggleLabelText(key, checked) {
-    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance') {
+    if (key === 'bounce' || key === 'showParticleCount' || key === 'showFps' || key === 'selfDriftEnabled' || key === 'selfDriftOrbitRepulsionEnabled' || key === 'particleRepulsionEnabled' || key === 'cursorInteractionEnabled' || key === 'adaptiveQualityEnabled' || key === 'prioritizeLastChangedSetting' || key === 'particleSizeVariance') {
       return checked ? 'Включена' : 'Выключена';
     }
     return checked ? 'Включены' : 'Выключены';

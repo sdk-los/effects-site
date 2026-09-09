@@ -71,6 +71,38 @@ window.ParticleSystem = window.ParticleSystem || {};
       this.vy += drift.vy;
     }
 
+    applyParticleRepulsion() {
+      if (!config.particleRepulsionEnabled || ParticleSystem.particles.length < 2) return;
+
+      const radius = Math.max(1, config.particleRepulsionRadius);
+      const strength = Math.max(0, config.particleRepulsionStrength);
+      let pushX = 0;
+      let pushY = 0;
+
+      ParticleSystem.particles.forEach((other) => {
+        if (other === this) return;
+
+        let dx = this.x - other.x;
+        let dy = this.y - other.y;
+        let distance = Math.hypot(dx, dy);
+        if (distance >= radius) return;
+
+        if (distance === 0) {
+          const angle = this.driftPhase || 0;
+          dx = Math.cos(angle);
+          dy = Math.sin(angle);
+          distance = 1;
+        }
+
+        const force = ((radius - distance) / radius) * strength;
+        pushX += (dx / distance) * force;
+        pushY += (dy / distance) * force;
+      });
+
+      this.vx += pushX;
+      this.vy += pushY;
+    }
+
     applyCursorInteraction() {
       if (!config.cursorInteractionEnabled || config.cursorMode === 'trail' || !ParticleSystem.isPointerActive()) return;
 
@@ -162,6 +194,7 @@ window.ParticleSystem = window.ParticleSystem || {};
         this.trail.shift();
       }
       this.applySelfDrift();
+      this.applyParticleRepulsion();
       this.applyCursorInteraction();
 
       this.x += this.vx;

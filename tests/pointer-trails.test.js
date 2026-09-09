@@ -184,6 +184,8 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailMaxPoints', 600), 500);
   assert.equal(ParticleSystem.readStoredSetting('trailColor', '#12abef'), '#12abef');
   assert.equal(ParticleSystem.readStoredSetting('trailColor', 'blue'), '#ffffff');
+  assert.equal(ParticleSystem.readStoredSetting('connectionColor', '#12abef'), '#12abef');
+  assert.equal(ParticleSystem.readStoredSetting('connectionColor', 'blue'), '#ffffff');
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailShape', 'star'), 'star');
   assert.equal(ParticleSystem.readStoredSetting('pointerTrailShape', 'arrow'), 'circle');
   ParticleSystem.config.pointerTrailLifetime = 1200;
@@ -191,6 +193,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   ParticleSystem.config.pointerTrailMinDistance = 4;
   ParticleSystem.config.pointerTrailMaxPoints = 240;
   ParticleSystem.config.trailColor = '#12abef';
+  ParticleSystem.config.connectionColor = '#12abef';
   ParticleSystem.config.pointerTrailShape = 'heart';
   ParticleSystem.saveSettings();
   const persistedSettings = JSON.parse(savedSettings);
@@ -199,6 +202,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.equal(persistedSettings.pointerTrailMinDistance, 4);
   assert.equal(persistedSettings.pointerTrailMaxPoints, 240);
   assert.equal(persistedSettings.trailColor, '#12abef');
+  assert.equal(persistedSettings.connectionColor, '#12abef');
   assert.equal(persistedSettings.pointerTrailShape, 'heart');
   Object.values(ParticleSystem.SETTINGS_PRESETS).forEach((preset) => {
     assert.deepEqual(Object.keys(preset.settings).sort(), Object.keys(ParticleSystem.DEFAULT_CONFIG).sort());
@@ -209,6 +213,7 @@ test('trail settings are configurable, range-normalized, and present in every pr
   assert.match(indexHtml, /data-setting="pointerTrailMinDistance"/);
   assert.match(indexHtml, /data-setting="pointerTrailMaxPoints"/);
   assert.match(indexHtml, /data-setting="trailColor"/);
+  assert.match(indexHtml, /data-setting="connectionColor"/);
   assert.match(indexHtml, /data-setting="pointerTrailShape"/);
 });
 

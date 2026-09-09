@@ -10,6 +10,9 @@ window.ParticleSystem = window.ParticleSystem || {};
     particleSizeVariance: true,
     particleShape: 'circle',
     speedMultiplier: 1.0,
+    particleRepulsionEnabled: false,
+    particleRepulsionStrength: 0.3,
+    particleRepulsionRadius: 36,
     selfDriftEnabled: false,
     selfDriftIntensity: 0.08,
     selfDriftSpeed: 0.5,
@@ -47,6 +50,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     connectionDistance: 120,
     connectionWidth: 1,
     connectionOpacity: 0.3,
+    connectionColor: '#ffffff',
     /* ── Взрывы по клику ── */
     explosionEnabled: false,
     explosionCount: 30,
@@ -447,7 +451,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'backgroundMode') {
       return ['solid', 'gradient', 'transparent'].includes(value) ? value : defaultValue;
     }
-    if (key === 'backgroundColor' || key === 'trailColor') {
+    if (key === 'backgroundColor' || key === 'trailColor' || key === 'connectionColor') {
       return ParticleSystem.isValidHexColor(value) ? value : defaultValue;
     }
     if (key.startsWith('customColor')) {

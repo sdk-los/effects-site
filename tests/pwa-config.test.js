@@ -36,7 +36,7 @@ test('index.html exposes mobile PWA metadata and registers the service worker wi
 
 test('deploy workflow injects the displayed application version', () => {
   const workflow = fs.readFileSync(path.join(root, '.github/workflows/deploy-pages.yml'), 'utf8');
-  assert.match(workflow, /APP_VERSION:\s*1\.0\.0/);
+  assert.match(workflow, /APP_VERSION:\s*1\.1\.0/);
   assert.match(workflow, /__APP_VERSION__/);
 });
 

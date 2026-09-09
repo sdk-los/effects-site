@@ -97,3 +97,31 @@ test('particle trails use their configured color and opacity', () => {
 
   assert.deepEqual(strokeStyles, ['rgba(18, 52, 86, 0.4)']);
 });
+
+test('enabled particle repulsion pushes a nearby particle away', () => {
+  const ParticleSystem = loadParticleSystem(true);
+  ParticleSystem.config.particleRepulsionEnabled = true;
+  ParticleSystem.config.particleRepulsionStrength = 0.6;
+  ParticleSystem.config.particleRepulsionRadius = 20;
+
+  const particle = new ParticleSystem.Particle(50, 40);
+  const neighbor = new ParticleSystem.Particle(55, 40);
+  ParticleSystem.particles = [particle, neighbor];
+
+  particle.applyParticleRepulsion();
+
+  assert.ok(particle.vx < 0);
+  assert.equal(particle.vy, 0);
+});
+
+test('disabled particle repulsion leaves velocity unchanged', () => {
+  const ParticleSystem = loadParticleSystem(true);
+  const particle = new ParticleSystem.Particle(50, 40);
+  const neighbor = new ParticleSystem.Particle(55, 40);
+  ParticleSystem.particles = [particle, neighbor];
+
+  particle.applyParticleRepulsion();
+
+  assert.equal(particle.vx, 0);
+  assert.equal(particle.vy, 0);
+});

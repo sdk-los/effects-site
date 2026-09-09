@@ -170,6 +170,36 @@
 
         <div class="control-group">
           <div class="control-label">
+            <span>Отталкивание частиц</span>
+            <button class="setting-help" type="button" data-tooltip="Частицы мягко расходятся друг от друга в пределах заданного радиуса. Настройка работает независимо от взаимодействия с курсором и режимов дрейфа." aria-label="Что означает отталкивание частиц?">?</button>
+          </div>
+          <div class="toggle-wrapper">
+            <label class="toggle">
+              <input type="checkbox" data-setting="particleRepulsionEnabled">
+              <span class="slider"></span>
+            </label>
+            <span class="toggle-label">Выключено</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Сила отталкивания</span>
+            <span class="control-value" data-display="particleRepulsionStrength">0.30</span>
+          </div>
+          <input type="range" data-setting="particleRepulsionStrength" min="0" max="1.2" step="0.01" value="0.3">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Радиус отталкивания</span>
+            <span class="control-value" data-display="particleRepulsionRadius">36 px</span>
+          </div>
+          <input type="range" data-setting="particleRepulsionRadius" min="10" max="150" value="36">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
             <span>Само-дрейф</span>
             <button class="setting-help" type="button" data-tooltip="Добавляет частицам автономное движение по выбранному алгоритму, даже когда курсор не двигается." aria-label="Что такое само-дрейф?">?</button>
           </div>
@@ -749,6 +779,15 @@
             <span class="control-value" data-display="connectionOpacity">0.30</span>
           </div>
           <input type="range" data-setting="connectionOpacity" min="0" max="1" step="0.01" value="0.3">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Цвет линий</span>
+          </div>
+          <label class="color-control" title="Цвет соединений">
+            <input type="color" data-setting="connectionColor" value="#ffffff">
+          </label>
         </div>
       </div>
     </details>
