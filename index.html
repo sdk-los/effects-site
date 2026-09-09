@@ -576,6 +576,7 @@
             <option value="warm">Тёплая</option>
             <option value="neon">Неоновая</option>
             <option value="rainbow">Радужная</option>
+            <option value="speed">Цвет от скорости</option>
             <option value="custom">Пользовательская</option>
           </select>
         </div>
@@ -688,6 +689,15 @@
             <span class="control-value" data-display="bloom">0.00</span>
           </div>
           <input type="range" data-setting="bloom" min="0" max="1" step="0.01" value="0">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Хроматическая аберрация</span>
+            <button class="setting-help" type="button" data-tooltip="Разделяет цветовые каналы по краям объектов, создавая призматический эффект. Большие значения сильнее нагружают устройство." aria-label="Что такое хроматическая аберрация?">?</button>
+            <span class="control-value" data-display="chromaticAberration">0 px</span>
+          </div>
+          <input type="range" data-setting="chromaticAberration" min="0" max="20" step="1" value="0">
         </div>
 
         <div class="control-group">

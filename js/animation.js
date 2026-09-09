@@ -22,6 +22,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     'particleCount',
     'shadowBlur',
     'bloom',
+    'chromaticAberration',
     'trailLength',
   ];
 
@@ -97,6 +98,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     if (key === 'particleCount') return currentValue > 80;
     if (key === 'shadowBlur') return currentValue > 0;
     if (key === 'bloom') return currentValue > 0;
+    if (key === 'chromaticAberration') return currentValue > 0;
     if (key === 'trailLength') return currentValue > 4;
     if (key === 'showConnections') return currentValue === true;
     if (key === 'auroraEnabled') return currentValue === true;
@@ -132,6 +134,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     else if (key === 'particleCount') nextValue = Math.max(80, Math.round(currentValue * 0.75));
     else if (key === 'shadowBlur') nextValue = Math.max(0, currentValue - 10);
     else if (key === 'bloom') nextValue = Math.max(0, currentValue - 0.2);
+    else if (key === 'chromaticAberration') nextValue = Math.max(0, currentValue - 2);
     else if (key === 'trailLength') nextValue = Math.max(4, currentValue - 4);
 
     if (nextValue === currentValue) return false;
@@ -203,6 +206,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     ParticleSystem.explosionParticles = ParticleSystem.explosionParticles.filter((p) => p.update());
     ParticleSystem.explosionParticles.forEach((p) => p.draw());
     ParticleSystem.applyBloom();
+    ParticleSystem.applyChromaticAberration();
     ParticleSystem.updateFpsIndicator(timestamp);
     ParticleSystem.updateParticleCountIndicator();
     ParticleSystem.animationId = requestAnimationFrame(ParticleSystem.animate);

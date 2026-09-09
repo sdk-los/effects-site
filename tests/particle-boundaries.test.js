@@ -29,6 +29,7 @@ function loadParticleSystem(bounce) {
       particleSize: 4,
       particleShape: 'circle',
       hue: 0,
+      colorPalette: 'mono',
       speedMultiplier: 1,
       velocityStretchEnabled: false,
       velocityStretchStrength: 1.5,
@@ -45,6 +46,7 @@ function loadParticleSystem(bounce) {
     canvasBounds: { width: 100, height: 80 },
     randomBetween: () => 0,
     getParticleColor: () => '#fff',
+    getSpeedParticleColor: (vx, vy) => `speed-${Math.hypot(vx, vy)}`,
     hexToRgb: (hex) => [
       Number.parseInt(hex.slice(1, 3), 16),
       Number.parseInt(hex.slice(3, 5), 16),
@@ -167,4 +169,25 @@ test('velocity stretch falls back to the normal shape for a stopped particle', (
 
   assert.equal(calls.length, 1);
   assert.deepEqual(calls[0].slice(1), [50, 40, 4, 'circle']);
+});
+
+test('speed palette derives particle color from its current velocity', () => {
+  const ParticleSystem = loadParticleSystem(true);
+  ParticleSystem.config.colorPalette = 'speed';
+  const fillStyles = [];
+  ParticleSystem.ctx = {
+    beginPath: () => {}, arc: () => {}, fill: () => {},
+    set fillStyle(value) { fillStyles.push(value); },
+    set shadowColor(value) {},
+  };
+  const particle = new ParticleSystem.Particle(50, 40);
+
+  particle.vx = 0;
+  particle.vy = 0;
+  particle.draw();
+  particle.vx = 3;
+  particle.vy = 4;
+  particle.draw();
+
+  assert.deepEqual(fillStyles, ['speed-0', 'speed-5']);
 });

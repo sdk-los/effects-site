@@ -13,6 +13,8 @@ window.ParticleSystem = window.ParticleSystem || {};
   ParticleSystem.cachedGradient = null;
   ParticleSystem.lastGradientConfig = {};
   ParticleSystem.bloomCanvas = null;
+  ParticleSystem.chromaticAberrationCanvas = null;
+  ParticleSystem.chromaticAberrationChannels = null;
 
   ParticleSystem.applyBloom = function applyBloom() {
     if (!config.bloom) return;
@@ -42,6 +44,55 @@ window.ParticleSystem = window.ParticleSystem || {};
     ctx.drawImage(ParticleSystem.bloomCanvas, 0, 0);
     ctx.globalAlpha = config.bloom * 0.45;
     ctx.drawImage(ParticleSystem.bloomCanvas, 0, 0);
+    ctx.restore();
+  };
+
+  ParticleSystem.applyChromaticAberration = function applyChromaticAberration() {
+    const offset = config.chromaticAberration;
+    if (!offset) return;
+
+    const canvas = document.getElementById('particle-canvas');
+    if (!canvas || !ParticleSystem.ctx) return;
+    if (!ParticleSystem.chromaticAberrationCanvas
+      || ParticleSystem.chromaticAberrationCanvas.width !== canvas.width
+      || ParticleSystem.chromaticAberrationCanvas.height !== canvas.height) {
+      ParticleSystem.chromaticAberrationCanvas = document.createElement('canvas');
+      ParticleSystem.chromaticAberrationCanvas.width = canvas.width;
+      ParticleSystem.chromaticAberrationCanvas.height = canvas.height;
+      ParticleSystem.chromaticAberrationChannels = ['#ff0000', '#00ff00', '#0000ff'].map(() => {
+        const channelCanvas = document.createElement('canvas');
+        channelCanvas.width = canvas.width;
+        channelCanvas.height = canvas.height;
+        return channelCanvas;
+      });
+    }
+
+    const sourceCanvas = ParticleSystem.chromaticAberrationCanvas;
+    const sourceCtx = sourceCanvas.getContext('2d');
+    sourceCtx.clearRect(0, 0, canvas.width, canvas.height);
+    sourceCtx.drawImage(canvas, 0, 0);
+
+    const pixelRatio = canvas.width / Math.max(1, ParticleSystem.canvasBounds.width);
+    const shift = offset * pixelRatio;
+    const ctx = ParticleSystem.ctx;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const drawChannel = (color, x, channelCanvas) => {
+      const channelCtx = channelCanvas.getContext('2d');
+      channelCtx.clearRect(0, 0, canvas.width, canvas.height);
+      channelCtx.drawImage(sourceCanvas, 0, 0);
+      channelCtx.globalCompositeOperation = 'multiply';
+      channelCtx.fillStyle = color;
+      channelCtx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'screen';
+      ctx.drawImage(channelCanvas, x, 0);
+    };
+
+    drawChannel('#ff0000', -shift, ParticleSystem.chromaticAberrationChannels[0]);
+    drawChannel('#00ff00', 0, ParticleSystem.chromaticAberrationChannels[1]);
+    drawChannel('#0000ff', shift, ParticleSystem.chromaticAberrationChannels[2]);
     ctx.restore();
   };
 
@@ -251,6 +302,8 @@ window.ParticleSystem = window.ParticleSystem || {};
       height: window.innerHeight,
     };
     ParticleSystem.bloomCanvas = null;
+    ParticleSystem.chromaticAberrationCanvas = null;
+    ParticleSystem.chromaticAberrationChannels = null;
 
     canvas.width = Math.ceil(ParticleSystem.canvasBounds.width * pixelRatio);
     canvas.height = Math.ceil(ParticleSystem.canvasBounds.height * pixelRatio);

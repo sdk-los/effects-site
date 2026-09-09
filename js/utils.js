@@ -318,6 +318,14 @@ window.ParticleSystem = window.ParticleSystem || {};
     );
   };
 
+  ParticleSystem.getSpeedParticleColor = function getSpeedParticleColor(vx, vy) {
+    const speed = Math.hypot(vx || 0, vy || 0);
+    const maxSpeed = Math.max(1, config.speedMultiplier * CONSTANTS.SPEED_VARIANCE * Math.SQRT2);
+    const progress = ParticleSystem.clamp(speed / maxSpeed, 0, 1);
+    const hue = 220 - progress * 220;
+    return `hsl(${Math.round(hue)}, 100%, 50%)`;
+  };
+
   ParticleSystem.getParticleColor = function getParticleColor() {
     const palette = COLOR_PALETTES[config.colorPalette] || COLOR_PALETTES.mono;
 

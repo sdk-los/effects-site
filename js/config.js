@@ -39,6 +39,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     pointerTrailShape: 'circle',
     shadowBlur: 0,
     bloom: 0,
+    chromaticAberration: 0,
     depthEnabled: false,
     depthStrength: 0.65,
     parallaxStrength: 24,

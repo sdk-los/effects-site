@@ -59,6 +59,9 @@ window.ParticleSystem = window.ParticleSystem || {};
     draw() {
       const ctx = ParticleSystem.ctx;
       const renderState = this.getRenderState();
+      const color = config.colorPalette === 'speed'
+        ? ParticleSystem.getSpeedParticleColor(this.vx, this.vy)
+        : this.color;
       
       // Draw trail if enabled (optimized with lineWidth gradient)
       if (config.trailEnabled && this.trail.length > 1) {
@@ -78,8 +81,8 @@ window.ParticleSystem = window.ParticleSystem || {};
       }
       
       // Draw particle
-      ctx.fillStyle = this.color;
-      ctx.shadowColor = this.color;
+      ctx.fillStyle = color;
+      ctx.shadowColor = color;
       ctx.shadowBlur = renderState.shadowBlur;
       ctx.globalAlpha = renderState.opacity;
       ParticleSystem.drawVelocityStretch(

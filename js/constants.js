@@ -47,6 +47,7 @@ window.ParticleSystem = window.ParticleSystem || {};
     warm: { label: 'Тёплая', hues: [18, 34, 48, 358] },
     neon: { label: 'Неоновая', hues: [130, 185, 292, 318] },
     rainbow: { label: 'Радужная', hues: [0, 45, 90, 150, 205, 265, 315] },
+    speed: { label: 'Цвет от скорости', hues: [] },
     custom: { label: 'Пользовательская', hues: [] },
   });
 
