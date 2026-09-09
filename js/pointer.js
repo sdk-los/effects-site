@@ -7,16 +7,35 @@ window.ParticleSystem = window.ParticleSystem || {};
   ParticleSystem.mouseX = -1000;
   ParticleSystem.mouseY = -1000;
   ParticleSystem.pointerTrails = [];
+  ParticleSystem.pointerResetTimeoutId = null;
 
   ParticleSystem.updatePointerPosition = function updatePointerPosition(clientX, clientY) {
     const canvas = document.getElementById('particle-canvas');
     const rect = canvas.getBoundingClientRect();
+    if (ParticleSystem.pointerResetTimeoutId !== null) {
+      window.clearTimeout(ParticleSystem.pointerResetTimeoutId);
+      ParticleSystem.pointerResetTimeoutId = null;
+    }
     ParticleSystem.mouseX = clientX - rect.left;
     ParticleSystem.mouseY = clientY - rect.top;
     ParticleSystem.addPointerTrailPoint();
   };
 
+  ParticleSystem.schedulePointerReset = function schedulePointerReset(delay = 250) {
+    if (ParticleSystem.pointerResetTimeoutId !== null) {
+      window.clearTimeout(ParticleSystem.pointerResetTimeoutId);
+    }
+    ParticleSystem.pointerResetTimeoutId = window.setTimeout(() => {
+      ParticleSystem.pointerResetTimeoutId = null;
+      ParticleSystem.resetPointerPosition();
+    }, delay);
+  };
+
   ParticleSystem.resetPointerPosition = function resetPointerPosition() {
+    if (ParticleSystem.pointerResetTimeoutId !== null) {
+      window.clearTimeout(ParticleSystem.pointerResetTimeoutId);
+      ParticleSystem.pointerResetTimeoutId = null;
+    }
     ParticleSystem.mouseX = CONSTANTS.MOUSE_OUT_OF_BOUNDS;
     ParticleSystem.mouseY = CONSTANTS.MOUSE_OUT_OF_BOUNDS;
   };

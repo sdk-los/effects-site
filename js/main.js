@@ -44,7 +44,7 @@ window.ParticleSystem = window.ParticleSystem || {};
       { passive: true }
     );
 
-    canvas.addEventListener('touchend', ParticleSystem.resetPointerPosition);
+    canvas.addEventListener('touchend', () => ParticleSystem.schedulePointerReset());
     canvas.addEventListener('touchcancel', ParticleSystem.resetPointerPosition);
   };
 
